@@ -98,6 +98,7 @@
     <ClCompile Include="PartyLights.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpotLights.cpp" />
+    <ClCompile Include="VehicleDummies.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Led.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpotLights.h" />
+    <ClInclude Include="VehicleDummies.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -70,7 +70,7 @@ void SpotLight::RegisterCorona(int lightid, CVector position, CRGBA color, float
 		color.r,
 		color.g,
 		color.b,
-		color.a,
+		200,
 		position,
 		radius,
 		100.0f,
@@ -89,5 +89,5 @@ void SpotLight::RegisterCorona(int lightid, CVector position, CRGBA color, float
 	);
 
 	CVector fposition = m_Vehicle->TransformFromObjectSpace(position);
-	Command< 0x09E5 >(fposition.x, fposition.y, fposition.z, (int)color.r, (int)color.g, (int)color.b, 40.0f);
+	Command< 0x09E5 >(fposition.x, fposition.y, fposition.z, (int)color.r, (int)color.g, (int)color.b, 20.0f);
 }

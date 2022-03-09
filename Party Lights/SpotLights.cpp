@@ -1,5 +1,6 @@
 #include "SpotLights.h"
 #include "Leds.h"
+#include "VehicleDummies.h"
 
 std::map<CVehicle*, int> SpotLights::m_NumCoronasRegistered;
 std::vector<SpotLight*> SpotLights::m_SpotLights;
@@ -23,6 +24,30 @@ void SpotLights::Initialize() {
 	Events::vehicleDtorEvent.after += [](CVehicle* vehicle) {
 		for (SpotLight* spotlight : m_SpotLights) {
 			if (spotlight->m_Vehicle == vehicle) RemoveSpotLight(spotlight);
+		}
+	};
+
+	Events::vehicleSetModelEvent += [](CVehicle* vehicle, int model) {
+
+
+		if (SpotLights::GetNumOfSpotlightsInVehicle(vehicle) > 0) return;
+
+		auto frames = VehicleDummies::GetFramesOnVehicle(vehicle);
+
+		int ledIndex = 0;
+
+		for (auto frame : frames) {
+			const std::string name = GetFrameNodeName(frame);
+
+			if (name.rfind("clublight", 0) == 0) {
+				CVector position = VehicleDummies::GetDummyPosition(frame);
+
+				//log_file << "Adding " << name << ", position= " << position.x << ", " << position.y << ", " << position.z << std::endl;
+
+				SpotLights::AddSpotLight(vehicle, position, ledIndex);
+				ledIndex++;
+				if (ledIndex >= 4) ledIndex = 0;
+			}
 		}
 	};
 }
@@ -77,6 +102,7 @@ int SpotLights::GetNumOfSpotlightsInVehicle(CVehicle* vehicle) {
 }
 
 void SpotLights::AddSpotLightToVehicles() {
+	/*
 	for (auto vehicle : CPools::ms_pVehiclePool) {
 		if (vehicle->m_nModelIndex != 591) continue;
 
@@ -87,6 +113,7 @@ void SpotLights::AddSpotLightToVehicles() {
 			SpotLights::AddSpotLight(vehicle, CVector(0.0f, -1.57401, 0.827247), 2);
 		}
 	}
+	*/
 }
 
 void SpotLights::RemoveSpotLightFromVehicles() {
@@ -113,7 +140,7 @@ void SpotLights::SetObjectColorFromSpotLight(CObject* object, SpotLight* spotlig
 				RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* data) {
 
 					Led* led = Leds::m_Leds[s_spotlight->ledIndex];
-					material->color = { led->color.r, led->color.g, led->color.b, led->color.a };
+					material->color = { led->color.r, led->color.g, led->color.b, 100 };
 
 					return material;
 					}, 0);
@@ -130,7 +157,7 @@ void SpotLights::SetObjectColorFromSpotLight(CObject* object, SpotLight* spotlig
 			RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* color) {
 
 				Led* led = Leds::m_Leds[s_spotlight->ledIndex];
-				material->color = { led->color.r, led->color.g, led->color.b, led->color.a };
+				material->color = { led->color.r, led->color.g, led->color.b, 120 };
 
 				return material;
 				}, 0);

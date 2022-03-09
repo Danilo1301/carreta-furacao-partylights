@@ -26,6 +26,8 @@
 
 using namespace plugin;
 
+//static std::ofstream log_file("log.txt");
+
 static float lerp(float a, float b, float f) {
 	return a + f * (b - a);
 }
@@ -80,3 +82,5 @@ static void DrawObjects() {
 		DrawWorldText(text, pos, CRGBA(255, 255, 255));
 	}
 }
+
+static char* (*GetFrameNodeName)(RwFrame* frame) = (char* (*)(RwFrame*))0x72FB30;

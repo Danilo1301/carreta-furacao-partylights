@@ -20,4 +20,5 @@ private:
 	static void AddSpotLightToVehicles();
 	static void RemoveSpotLightFromVehicles();
 	static void SetObjectColorFromSpotLight(CObject* object, SpotLight* spotlight);
+	static void FindDummies(CVehicle* vehicle, RwFrame* frame, bool parent);
 };

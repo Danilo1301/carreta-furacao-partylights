@@ -1,4 +1,5 @@
 #include "Leds.h"
+#include "VehicleDummies.h"
 
 std::vector<Led*> Leds::m_Leds;
 
@@ -31,27 +32,25 @@ void Leds::Update() {
 }
 
 void Leds::RenderVehicleLeds(CVehicle* vehicle) {
-	if (vehicle->m_nModelIndex == 591 || vehicle->m_nModelIndex == 514) {
-		if (vehicle->m_pRwClump && vehicle->m_pRwClump->object.type == rpCLUMP) {
-			RpClumpForAllAtomics(vehicle->m_pRwClump, [](RpAtomic* atomic, void* data) {
-				if (atomic->geometry) {
-					atomic->geometry->flags |= rpGEOMETRYMODULATEMATERIALCOLOR;
+	if (vehicle->m_pRwClump && vehicle->m_pRwClump->object.type == rpCLUMP) {
+		RpClumpForAllAtomics(vehicle->m_pRwClump, [](RpAtomic* atomic, void* data) {
+			if (atomic->geometry) {
+				atomic->geometry->flags |= rpGEOMETRYMODULATEMATERIALCOLOR;
 
-					RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* data) {
-						if (material->texture > 0) {
-							std::string textureName = material->texture->name;
+				RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* data) {
+					if (material->texture > 0) {
+						std::string textureName = material->texture->name;
 
-							if (textureName.find("lights1") != std::string::npos) ApplyLedColor(Leds::m_Leds[0], material);
-							if (textureName.find("lights2") != std::string::npos) ApplyLedColor(Leds::m_Leds[1], material);
-							if (textureName.find("lights3") != std::string::npos) ApplyLedColor(Leds::m_Leds[2], material);
-							if (textureName.find("lights4") != std::string::npos) ApplyLedColor(Leds::m_Leds[3], material);
-						}
-						return material;
-						}, 0);
-				}
-				return atomic;
-				}, 0);
-		}
+						if (textureName.find("leds1") != std::string::npos) ApplyLedColor(Leds::m_Leds[0], material);
+						if (textureName.find("leds2") != std::string::npos) ApplyLedColor(Leds::m_Leds[1], material);
+						if (textureName.find("leds3") != std::string::npos) ApplyLedColor(Leds::m_Leds[2], material);
+						if (textureName.find("leds4") != std::string::npos) ApplyLedColor(Leds::m_Leds[3], material);
+					}
+					return material;
+					}, 0);
+			}
+			return atomic;
+			}, 0);
 	}
 }
 
