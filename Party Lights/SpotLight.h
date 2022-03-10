@@ -25,5 +25,5 @@ public:
 	CVector GetWorldSpace(CVector offset);
 	void PointAtOffset(CVector offset);
 	void UpdateSpotlightPosition();
-	void RegisterCorona(int lightid, CVector position, CRGBA color, float radius);
+	void RegisterCorona(int lightid, CVector position, CRGBA color);
 };

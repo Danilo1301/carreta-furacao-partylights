@@ -4,6 +4,8 @@
 #include <iostream>
 #include <map>
 #include <math.h>
+#include <fstream>
+#include <filesystem>
 
 #include "plugin.h"
 
@@ -22,14 +24,20 @@
 
 #include "extensions/ScriptCommands.h"
 
+#include "Log.h"
+
 #define M_PI 3.14159265358979323846
 
 using namespace plugin;
 
-//static std::ofstream log_file("log.txt");
+//static std::ofstream log_file("log.txt", std::ios_base::app);
 
 static float lerp(float a, float b, float f) {
 	return a + f * (b - a);
+}
+
+static unsigned char ucharIntensity(unsigned char uc, float intensity) {
+	return (unsigned char)std::clamp((int)round( ((float)uc) * intensity ), 0, 255);
 }
 
 static void DrawWorldText(char* text, CVector position, CRGBA color = CRGBA(0, 255, 0, 255)) {

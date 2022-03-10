@@ -60,7 +60,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(PLUGIN_SDK_DIR)\plugin_sa\;$(PLUGIN_SDK_DIR)\plugin_sa\game_sa\;$(PLUGIN_SDK_DIR)\shared\;$(PLUGIN_SDK_DIR)\shared\game\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SourcePath)\include;$(PLUGIN_SDK_DIR)\plugin_sa\;$(PLUGIN_SDK_DIR)\plugin_sa\game_sa\;$(PLUGIN_SDK_DIR)\shared\;$(PLUGIN_SDK_DIR)\shared\game\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;GTASA;GTAGAME_NAME="San Andreas";GTAGAME_ABBR="SA";GTAGAME_ABBRLOW="sa";GTAGAME_PROTAGONISTNAME="CJ";GTAGAME_CITYNAME="San Andreas";_LA_SUPPORT;PLUGIN_SGV_10US;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -95,7 +95,9 @@
   <ItemGroup>
     <ClCompile Include="Led.cpp" />
     <ClCompile Include="Leds.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="PartyLights.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpotLights.cpp" />
     <ClCompile Include="VehicleDummies.cpp" />
@@ -103,8 +105,10 @@
   <ItemGroup>
     <ClInclude Include="Led.h" />
     <ClInclude Include="Leds.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="PartyLights.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpotLights.h" />
     <ClInclude Include="VehicleDummies.h" />

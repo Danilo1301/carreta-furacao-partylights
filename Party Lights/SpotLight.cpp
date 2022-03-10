@@ -1,6 +1,7 @@
 #include "SpotLight.h"
 #include "SpotLights.h"
 #include "Leds.h"
+#include "Settings.h"
 
 SpotLight::SpotLight(CVehicle* vehicle, CVector position) {
 	m_Vehicle = vehicle;
@@ -47,10 +48,10 @@ void SpotLight::RenderCoronas() {
 	
 	SpotLights::m_NumCoronasRegistered[m_Vehicle]++;
 
-	int id = reinterpret_cast<unsigned int>(m_Vehicle) + 40 + SpotLights::m_NumCoronasRegistered[m_Vehicle];
+	int id = reinterpret_cast<unsigned int>(m_Vehicle) + 20 + SpotLights::m_NumCoronasRegistered[m_Vehicle];
 	Led* led = Leds::m_Leds[ledIndex];
 
-	RegisterCorona(id, m_Position, led->color, 1.0f);
+	RegisterCorona(id, m_Position, led->color);
 }
 
 CVector SpotLight::GetWorldSpace(CVector offset) {
@@ -63,19 +64,19 @@ void SpotLight::UpdateSpotlightPosition() {
 	m_Object->m_qAttachedEntityRotation.Set(0, 0.0f - b, -M_PI/2 + a);
 }
 
-void SpotLight::RegisterCorona(int lightid, CVector position, CRGBA color, float radius) {
+void SpotLight::RegisterCorona(int lightid, CVector position, CRGBA color) {
 	CCoronas::RegisterCorona(
 		lightid,
 		m_Vehicle,
 		color.r,
 		color.g,
 		color.b,
-		200,
+		ucharIntensity(255, Settings::clublightTransparency),
 		position,
-		radius,
+		Settings::coronaRadius,
 		100.0f,
 		eCoronaType::CORONATYPE_SHINYSTAR,
-		eCoronaFlareType::FLARETYPE_SUN,
+		Settings::useLightFlare ? eCoronaFlareType::FLARETYPE_SUN : eCoronaFlareType::FLARETYPE_NONE,
 		false,
 		false,
 		0,
@@ -89,5 +90,13 @@ void SpotLight::RegisterCorona(int lightid, CVector position, CRGBA color, float
 	);
 
 	CVector fposition = m_Vehicle->TransformFromObjectSpace(position);
-	Command< 0x09E5 >(fposition.x, fposition.y, fposition.z, (int)color.r, (int)color.g, (int)color.b, 20.0f);
+	Command< 0x09E5 >(
+		fposition.x,
+		fposition.y,
+		fposition.z,
+		(int)ucharIntensity(color.r, Settings::lightIntensity),
+		(int)ucharIntensity(color.g, Settings::lightIntensity),
+		(int)ucharIntensity(color.b, Settings::lightIntensity),
+		20.0f
+	);
 }

@@ -1,6 +1,7 @@
 #include "SpotLights.h"
 #include "Leds.h"
 #include "VehicleDummies.h"
+#include "Settings.h"
 
 std::map<CVehicle*, int> SpotLights::m_NumCoronasRegistered;
 std::vector<SpotLight*> SpotLights::m_SpotLights;
@@ -46,14 +47,13 @@ void SpotLights::Initialize() {
 
 				SpotLights::AddSpotLight(vehicle, position, ledIndex);
 				ledIndex++;
-				if (ledIndex >= 4) ledIndex = 0;
+				if (ledIndex >= 3) ledIndex = 0;
 			}
 		}
 	};
 }
 
 void SpotLights::Update() {
-	AddSpotLightToVehicles();
 	RemoveSpotLightFromVehicles();
 
 	static char text[256] = "";
@@ -101,21 +101,6 @@ int SpotLights::GetNumOfSpotlightsInVehicle(CVehicle* vehicle) {
 	return count;
 }
 
-void SpotLights::AddSpotLightToVehicles() {
-	/*
-	for (auto vehicle : CPools::ms_pVehiclePool) {
-		if (vehicle->m_nModelIndex != 591) continue;
-
-		if (SpotLights::GetNumOfSpotlightsInVehicle(vehicle) == 0) {
-			SpotLights::AddSpotLight(vehicle, CVector(0.0f, 3.9978f, 2.92894f), 0);
-			SpotLights::AddSpotLight(vehicle, CVector(0.0f, -3.37178, 2.92894f), 1);
-			SpotLights::AddSpotLight(vehicle, CVector(0.0f, 1.67875, 0.827247), 1);
-			SpotLights::AddSpotLight(vehicle, CVector(0.0f, -1.57401, 0.827247), 2);
-		}
-	}
-	*/
-}
-
 void SpotLights::RemoveSpotLightFromVehicles() {
 	std::vector<SpotLight*> toremove;
 
@@ -140,7 +125,16 @@ void SpotLights::SetObjectColorFromSpotLight(CObject* object, SpotLight* spotlig
 				RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* data) {
 
 					Led* led = Leds::m_Leds[s_spotlight->ledIndex];
-					material->color = { led->color.r, led->color.g, led->color.b, 100 };
+	
+					//Leds::m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->color), *reinterpret_cast<unsigned int*>(&material->color)));
+					material->color = { led->color.r, led->color.g, led->color.b, ucharIntensity(led->color.a, Settings::clublightTransparency) };
+
+					//Leds::m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->surfaceProps.specular), *reinterpret_cast<unsigned int*>(&material->surfaceProps.specular)));
+					material->surfaceProps.ambient = 10.0f * Settings::clublightTransparency;
+					material->surfaceProps.diffuse = 10.0f * Settings::clublightTransparency;
+					material->surfaceProps.specular = 10.0f * Settings::clublightTransparency;
+
+					//just dont forget again you wrote this twice - 1
 
 					return material;
 					}, 0);
@@ -157,7 +151,16 @@ void SpotLights::SetObjectColorFromSpotLight(CObject* object, SpotLight* spotlig
 			RpGeometryForAllMaterials(atomic->geometry, [](RpMaterial* material, void* color) {
 
 				Led* led = Leds::m_Leds[s_spotlight->ledIndex];
-				material->color = { led->color.r, led->color.g, led->color.b, 120 };
+
+				//Leds::m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->color), *reinterpret_cast<unsigned int*>(&material->color)));
+				material->color = { led->color.r, led->color.g, led->color.b, ucharIntensity(led->color.a, Settings::clublightTransparency) };
+
+				//Leds::m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->surfaceProps.specular), *reinterpret_cast<unsigned int*>(&material->surfaceProps.specular)));
+				material->surfaceProps.ambient = 10.0f * Settings::clublightTransparency;
+				material->surfaceProps.diffuse = 10.0f * Settings::clublightTransparency;
+				material->surfaceProps.specular = 10.0f * Settings::clublightTransparency;
+
+				//just dont forget again you wrote this twice - 1
 
 				return material;
 				}, 0);

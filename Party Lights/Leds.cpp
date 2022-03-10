@@ -57,9 +57,13 @@ void Leds::RenderVehicleLeds(CVehicle* vehicle) {
 void Leds::ApplyLedColor(Led* led, RpMaterial* material) {
 	CRGBA color = led->color;
 
-	m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->color), *reinterpret_cast<unsigned int*>(&material->color)));
-
+	//m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->color), *reinterpret_cast<unsigned int*>(&material->color)));
 	material->color = { color.r, color.g, color.b, color.a };
+
+	//m_ResetEntries.push_back(std::make_pair(reinterpret_cast<unsigned int*>(&material->surfaceProps.specular), *reinterpret_cast<unsigned int*>(&material->surfaceProps.specular)));
+	material->surfaceProps.ambient = 100.0f;
+	material->surfaceProps.diffuse = 100.0f;
+	material->surfaceProps.specular = 100.0f;
 }
 
 void Leds::AddLed(int offset, float interval, bool slowColorTransition) {

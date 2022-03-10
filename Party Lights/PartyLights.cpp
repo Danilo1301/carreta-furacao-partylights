@@ -1,6 +1,7 @@
 #include "PartyLights.h"
 #include "SpotLights.h"
 #include "Leds.h"
+#include "Settings.h"
 
 void PartyLights::Update() {
 	Leds::Update();
@@ -12,6 +13,11 @@ void PartyLights::Draw() {
 }
 
 PartyLights::PartyLights() {
+	Log::OpenLog();
+	Log::AddLog("Init");
+
+	Settings::LoadJson();
+
 	SpotLights::Initialize();
 	Leds::Initialize();
 
